@@ -13,6 +13,10 @@ function App() {
   const [buttonState , setButtonState] = useState('Create');
   const [status , setStatus] = useState('Create new Employee');
   const [hideEmpId , setHideEmpId] = useState(true);
+  const [create , setCreate] = useState(false);
+  const [read , setRead] = useState(false);
+  const [update , setUpdate] = useState(false);
+  const [deletee , setDltee] = useState(false);
 
   const readUpdateDeleteEmp = (mode) => {
     clearFields();
@@ -20,19 +24,26 @@ function App() {
       case 'Read':
         setStatus( 'Read Existing Employee');
         setButtonState("Read");
+        setRead(true);
         break;
+
        case 'Update' :
          setStatus("Update Existing Employee");
          setButtonState("Update");
+         setUpdate(true);
          break;
+
        case 'Delete':
          setStatus( "Delete Existing Employee");
          setButtonState("Delete");
-         break;  
+         setDltee(true);
+         break;
+           
        default:
          setStatus('Create New Employee');
          setButtonState("Create");
          setHideEmpId(true);
+         setCreate(true);
     } 
   }
 
@@ -44,6 +55,10 @@ const clearFields = () =>{
   setDob('');
   setGender("");
   setHideEmpId(false);
+  setCreate(false);
+  setRead(false);
+  setUpdate(false);
+  setDltee(false);
 }
   
 const createEmp =() =>{
@@ -54,10 +69,13 @@ Axios.post('http://localhost:3000/employees', {
  email:email,
  dob: dob,
  gender: gender
-})
-.then(()=>{
+}).then((res)=>{
+  console.log(res);
   alert(`Employee ${firstName+' '+surName} created successfully`);
-});
+},(error) => {
+  alert("Employee Id does not exist");
+  console.log(error);
+})
 };
 
 const readEmp =() =>{
@@ -68,8 +86,7 @@ const readEmp =() =>{
   setEmail(res.data.email);
   setDob(res.data.dob);
   setGender(res.data.gender);
-},
-(error) => {
+},(error) => {
 console.log(error);
 })
 }
@@ -79,19 +96,23 @@ const updateDelEmployee = () =>{
       Axios.put(('http://localhost:3000/employees/'+empId),{
            firstName,surName,email,dob,gender }).then((res)=>{
              console.log(res);
+             alert('Employee updated successfully');
              },
             (error) => {
             console.log(error);
            })
           break;
+
   case 'Delete' :
       Axios.delete('http://localhost:3000/employees/'+empId).then((res)=>{
         console.log(res);
+        alert('Employee deleted successfully');
          },
          (error) => {
              console.log(error);
           })
          break;
+
   default:
       createEmp();
 }}
@@ -112,15 +133,20 @@ else{
 
 const showButtonUp = hideEmpId ?{display :'none'} :{display:'block' ,float:'right'};
 const showButtonDown = buttonState==='Read' ? {display:'none' }: {display:'block' ,float:'right'};
-  return (
+const createButtonActive = create ? "CreateButton" : " ";
+const readButtonActive = read ? "ReadButton" : " ";
+const updateButtonActive = update ? "UpdateButton" : " ";
+const deleteButtonActive = deletee ? "DeleteButton" : " ";
+      
+return (
     <div className="App">
       <div className="App-header">
-        
-        <h1>Employee Management </h1> <hr />
-        <button onClick={readUpdateDeleteEmp.bind(this,'Create')} >Create</button>
-        <button onClick={readUpdateDeleteEmp.bind(this,'Read')} >Read</button>
-        <button onClick={readUpdateDeleteEmp.bind(this,'Update')} >Update</button>
-        <button onClick={readUpdateDeleteEmp.bind(this,'Delete')} >Delete</button> <hr />
+        <h1>Employee Management </h1> 
+        <h3>Open Book Assignment by Madhan Kumar T</h3>
+        <button className={createButtonActive} onClick={readUpdateDeleteEmp.bind(this,'Create')} >Create</button>
+        <button className={readButtonActive} onClick={readUpdateDeleteEmp.bind(this,'Read')} >Read</button>
+        <button className={updateButtonActive} onClick={readUpdateDeleteEmp.bind(this,'Update')} >Update</button>
+        <button className={deleteButtonActive} onClick={readUpdateDeleteEmp.bind(this,'Delete')} >Delete</button> <hr />
        <br /> 
        <div className='Status-Updater'>
        <p>{status}</p>   
@@ -128,92 +154,96 @@ const showButtonDown = buttonState==='Read' ? {display:'none' }: {display:'block
        </div>
        </div>
        <div className='information'>
-              
        <table>
         <tbody>
-      <tr>
-      <td> 
-        <label> Employee ID  : </label>
-        </td>
-      <td>
-        <input type="text" value={empId} onChange={(event)=>{
+         <tr>
+          <td> 
+            <label for='myEmpId'>Employee ID  :</label>
+         </td>
+         <td>
+        <input type="text" value={empId} id='myEmpId' onChange={(event)=>{
           setEmpId(event.target.value);
         }}/>
         </td>
-        
       </tr>
       </tbody>
+
       <tbody>
       <tr>
              <td></td>
-             <td style={showButtonUp}><input type='button' value='Read'  onClick={readEmp} /></td>
+             <td style={showButtonUp}><input type='button' value='Read'  onClick={readEmp} /></td> 
            </tr>  
         </tbody>
+        </table><hr />
+        <table>
       <tbody>
       <tr>
-      
       <td> 
-        <label> First Name   : </label>
+        <label for='myFirstName'> First Name   : </label>
         </td>
       <td>
-        <input type="text" value={firstName} onChange={(event)=>{
+        <input type="text" value={firstName} id='myFirstName' onChange={(event)=>{
           setfirstName(event.target.value);
         }}/>
-        </td>
-        
+        </td>  
       </tr>
       </tbody>
+
       <tbody>
       <tr>
       <td> 
-        <label> Last Name  :</label>
+        <label for='myLastName'> Last Name  :</label>
         </td>
       <td>
-        <input type="text" value={surName} onChange={(event)=>{
+        <input type="text" value={surName} id='myLastName' onChange={(event)=>{
           setsurName(event.target.value);
         }}/>
         </td>
       </tr>
       </tbody>
+
       <tbody><tr>
       <td> 
-        <label> E-Mail  :</label>
+        <label for='myEmail'> E-Mail  :</label>
         </td>
       <td>
-        <input type="text" value={email} onChange={(event)=>{
+        <input type="email" value={email} id='myEmail' onChange={(event)=>{
           setEmail(event.target.value);
-        }}/>
+        }} required/>
         </td>
       </tr>
       </tbody>
+
       <tbody><tr>
       <td> 
-        <label> DOB  :</label>
+        <label for='myDob'> DOB  :</label>
         </td>
       <td>
-        <input type="date" value={dob} onChange={(event)=>{
+        <input type="date" value={dob} id='myDob' onChange={(event)=>{
           setDob(event.target.value);
         }}/>
         </td>
       </tr>
       </tbody>
+      
       <tbody>
       <tr>
       <td> 
-        <label> Gender  :</label>
+        <label for='myGender'> Gender  :</label>
         </td>
       <td>
-        <input style={{fontSize:20}} type="radio" value='Male' onChange={(event)=>{
+        <input style={{fontSize:20}} type="radio" value='Male' id='myGender' checked={gender==='Male'} onChange={(event)=>{
           setGender(event.target.value);
         }}/>
         <label> Male </label>
-        <input type="radio" value="Female"  onChange={(event)=>{
+        <input type="radio" value="Female" id='myGender' checked={gender==='Female'} onChange={(event)=>{
           setGender(event.target.value); 
         }}/>
         <label> Female</label>
         </td>
       </tr>
       </tbody>
+      
       <tbody>
         <tr>
           <td></td>

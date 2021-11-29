@@ -68,11 +68,33 @@ td {
   font-size: 20px;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
+  text-align: left;
 }
 
 .Status-Updater > hr {
   height: 2px;
-  width: 30%;
+  width: 70%;
   color: grey;
   background-color: gray;
+  margin-left: 0;
+}
+
+.CreateButton {
+  background-color: white;
+  color: rgba(0, 45, 128, 0.603);
+}
+
+.ReadButton {
+  background-color: white;
+  color: rgba(0, 45, 128, 0.603);
+}
+
+.UpdateButton {
+  background-color: white;
+  color: rgba(0, 45, 128, 0.603);
+}
+
+.DeleteButton {
+  background-color: white;
+  color: rgba(0, 45, 128, 0.603);
 }

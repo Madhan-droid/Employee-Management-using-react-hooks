@@ -60,9 +60,11 @@ const clearFields = () =>{
   setUpdate(false);
   setDltee(false);
 }
+
+const empUrl='http://localhost:3000/employees';
   
 const createEmp =() =>{
-Axios.post('http://localhost:3000/employees', {
+Axios.post(empUrl, {
  empId : empId,
  firstName: firstName,
  surName:surName, 
@@ -79,7 +81,7 @@ Axios.post('http://localhost:3000/employees', {
 };
 
 const readEmp =() =>{
-  Axios.get('http://localhost:3000/employees/'+empId).then((res)=>{
+  Axios.get(empUrl+'/'+empId).then((res)=>{
   console.log(res);
   setfirstName(res.data.firstName);
   setsurName(res.data.surName);
@@ -93,7 +95,7 @@ console.log(error);
 const updateDelEmployee = () =>{
   switch(buttonState){
     case 'Update' :
-      Axios.put(('http://localhost:3000/employees/'+empId),{
+      Axios.put((empUrl+'/'+empId),{
            firstName,surName,email,dob,gender }).then((res)=>{
              console.log(res);
              alert('Employee updated successfully');
@@ -104,7 +106,7 @@ const updateDelEmployee = () =>{
           break;
 
   case 'Delete' :
-      Axios.delete('http://localhost:3000/employees/'+empId).then((res)=>{
+      Axios.delete(empUrl+'/'+empId).then((res)=>{
         console.log(res);
         alert('Employee deleted successfully');
          },

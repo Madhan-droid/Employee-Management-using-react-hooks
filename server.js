@@ -16,11 +16,7 @@ var docClnt = new AWS.DynamoDB.DocumentClient();
 
 app.post('/employees', (req, res ) =>{
     var empId = Number(req.body.empId);
-    const firstName=req.body.firstName;
-    const surName=req.body.surName;
-    const email=req.body.email;
-    const dob=req.body.dob;
-    const gender=req.body.gender;
+    const {firstName,surName,email,dob,gender} = req.body;
              
          var params ={
              TableName:table,        

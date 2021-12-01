@@ -3,20 +3,21 @@ import { useState} from "react";
 import validator from 'validator';
 import Axios from 'axios';
 
-function App() {
-  const [empId, setEmpId] = useState('');
-  const [firstName, setfirstName] = useState("");
-  const [surName, setsurName] = useState("");
-  const [email, setEmail] = useState("");
-  const [dob, setDob] = useState('');
-  const [gender, setGender] = useState("");
-  const [buttonState , setButtonState] = useState('Create');
-  const [status , setStatus] = useState('Create new Employee');
-  const [hideEmpId , setHideEmpId] = useState(true);
-  const [create , setCreate] = useState(false);
-  const [read , setRead] = useState(false);
-  const [update , setUpdate] = useState(false);
-  const [deletee , setDltee] = useState(false);
+function App(props) {
+  const [empId, setEmpId] = useState(props.empId);
+  const [firstName, setfirstName] = useState(props.firstName);
+  const [surName, setsurName] = useState(props.surName);
+  const [email, setEmail] = useState(props.email);
+  const [dob, setDob] = useState(props.dob);
+  const [gender, setGender] = useState(props.gender);
+  const [buttonState , setButtonState] = useState(props.buttonState);
+  const [status , setStatus] = useState(props.status);
+  const [hideEmpId , setHideEmpId] = useState(props.hideEmpId);
+  const [create , setCreate] = useState(props.create);
+  const [read , setRead] = useState(props.read);
+  const [update , setUpdate] = useState(props.update);
+  const [deletee , setDltee] = useState(props.deletee);
+
 
   const readUpdateDeleteEmp = (mode) => {
     clearFields();
@@ -48,40 +49,46 @@ function App() {
   }
 
 const clearFields = () =>{
-  setEmpId('');
-  setfirstName("");
-  setsurName("");
-  setEmail("");
-  setDob('');
-  setGender("");
+  setEmpId(props.empId);
+  setfirstName(props.firstName);
+  setsurName(props.surName);
+  setEmail(props.email);
+  setDob(props.dob);
+  setGender(props.gender);
   setHideEmpId(false);
-  setCreate(false);
-  setRead(false);
-  setUpdate(false);
-  setDltee(false);
+  setCreate(props.create);
+  setRead(props.read);
+  setUpdate(props.update);
+  setDltee(props.deletee);
 }
 
 const empUrl='http://localhost:3000/employees';
-  
+
 const createEmp =() =>{
-Axios.post(empUrl, {
- empId : empId,
- firstName: firstName,
- surName:surName, 
- email:email,
- dob: dob,
- gender: gender
+  if (empId === '')
+    alert('Enter employee ID');
+  else{
+   Axios.post(empUrl, {
+   empId : empId,
+   firstName: firstName,
+   surName:surName, 
+   email:email,
+   dob: dob,
+   gender: gender
 }).then((res)=>{
   console.log(res);
   alert(`Employee ${firstName+' '+surName} created successfully`);
 },(error) => {
-  alert("Employee Id does not exist");
+  alert("Employee Id exist");
   console.log(error);
 })
-};
+}};
 
 const readEmp =() =>{
-  Axios.get(empUrl+'/'+empId).then((res)=>{
+  if (empId === '')
+    alert('Enter employee ID');
+  else{
+    Axios.get(empUrl+'/'+empId).then((res)=>{
   console.log(res);
   setfirstName(res.data.firstName);
   setsurName(res.data.surName);
@@ -91,10 +98,14 @@ const readEmp =() =>{
 },(error) => {
 console.log(error);
 })
-}
+}}
 const updateDelEmployee = () =>{
+
   switch(buttonState){
     case 'Update' :
+      if (empId === '')
+      alert('Enter employee ID');
+    else{
       Axios.put((empUrl+'/'+empId),{
            firstName,surName,email,dob,gender }).then((res)=>{
              console.log(res);
@@ -102,17 +113,20 @@ const updateDelEmployee = () =>{
              },
             (error) => {
             console.log(error);
-           })
+           })}
           break;
 
   case 'Delete' :
+    if (empId === '')
+    alert('Enter employee ID');
+  else{
       Axios.delete(empUrl+'/'+empId).then((res)=>{
         console.log(res);
         alert('Employee deleted successfully');
          },
          (error) => {
              console.log(error);
-          })
+          })}
          break;
 
   default:
@@ -145,22 +159,23 @@ return (
       <div className="App-header">
         <h1>Employee Management </h1> 
         <h3>Open Book Assignment by Madhan Kumar T</h3>
-        <button className={createButtonActive} onClick={readUpdateDeleteEmp.bind(this,'Create')} >Create</button>
-        <button className={readButtonActive} onClick={readUpdateDeleteEmp.bind(this,'Read')} >Read</button>
-        <button className={updateButtonActive} onClick={readUpdateDeleteEmp.bind(this,'Update')} >Update</button>
-        <button className={deleteButtonActive} onClick={readUpdateDeleteEmp.bind(this,'Delete')} >Delete</button> <hr />
-       <br /> 
+        <button className={createButtonActive} onClick={(e)=> readUpdateDeleteEmp('Create')} >Create</button>
+        <button className={readButtonActive} onClick={ (e) => readUpdateDeleteEmp('Read')} >Read</button>
+        <button className={updateButtonActive} onClick={(e) => readUpdateDeleteEmp('Update')} >Update</button>
+        <button className={deleteButtonActive} onClick={(e) => readUpdateDeleteEmp('Delete')} >Delete</button> <hr />
+       
+       </div>
        <div className='Status-Updater'>
        <p>{status}</p>   
        <hr />
-       </div>
+      
        </div>
        <div className='information'>
        <table>
         <tbody>
          <tr>
           <td> 
-            <label for='myEmpId'>Employee ID  :</label>
+            <label htmlFor='myEmpId' style = {{ fontWeight : "bold"}}>Employee ID  :</label>
          </td>
          <td>
         <input type="text" value={empId} id='myEmpId' onChange={(event)=>{
@@ -176,12 +191,13 @@ return (
              <td style={showButtonUp}><input type='button' value='Read'  onClick={readEmp} /></td> 
            </tr>  
         </tbody>
-        </table><hr />
+        </table>
+        <hr />
         <table>
       <tbody>
       <tr>
       <td> 
-        <label for='myFirstName'> First Name   : </label>
+        <label htmlFor='myFirstName'> First Name   : </label>
         </td>
       <td>
         <input type="text" value={firstName} id='myFirstName' onChange={(event)=>{
@@ -194,7 +210,7 @@ return (
       <tbody>
       <tr>
       <td> 
-        <label for='myLastName'> Last Name  :</label>
+        <label htmlFor='myLastName'> Last Name  :</label>
         </td>
       <td>
         <input type="text" value={surName} id='myLastName' onChange={(event)=>{
@@ -206,7 +222,7 @@ return (
 
       <tbody><tr>
       <td> 
-        <label for='myEmail'> E-Mail  :</label>
+        <label htmlFor='myEmail'> E-Mail  :</label>
         </td>
       <td>
         <input type="email" value={email} id='myEmail' onChange={(event)=>{
@@ -218,7 +234,7 @@ return (
 
       <tbody><tr>
       <td> 
-        <label for='myDob'> DOB  :</label>
+        <label htmlFor='myDob'> DOB  :</label>
         </td>
       <td>
         <input type="date" value={dob} id='myDob' onChange={(event)=>{
@@ -231,7 +247,7 @@ return (
       <tbody>
       <tr>
       <td> 
-        <label for='myGender'> Gender  :</label>
+        <label htmlFor='myGender'> Gender  :</label>
         </td>
       <td>
         <input style={{fontSize:20}} type="radio" value='Male' id='myGender' checked={gender==='Male'} onChange={(event)=>{

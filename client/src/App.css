@@ -1,22 +1,10 @@
 .App {
-  text-align: center;
   background-color: rgb(187, 219, 231);
   margin: auto;
   margin-top: 70px;
   padding: 20px;
-  width: 50%;
+  width: 40%;
   height: 90%;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 20px;
-}
-
-button {
-  background-color: rgba(0, 45, 128, 0.603);
-  color: white;
-  text-decoration: none;
-  padding: 10px 20px;
-  margin: 4px 32px;
-  border-radius: 6px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
 }
@@ -25,7 +13,8 @@ button:hover {
   cursor: pointer;
 }
 
-input[type="button"] {
+input[type="button"],
+button {
   background-color: rgba(0, 45, 128, 0.603);
   color: white;
   text-decoration: none;
@@ -53,8 +42,16 @@ input[type="date"] {
 }
 
 table {
-  width: 80%;
+  width: 60%;
   height: 100%;
+}
+
+.information > hr {
+  height: 1px;
+  width: 70%;
+  color: grey;
+  background-color: gray;
+  margin-left: 1cm;
 }
 
 th,
@@ -65,10 +62,11 @@ td {
 
 .Status-Updater > p {
   color: blue;
-  font-size: 20px;
+  font-size: 22px;
   font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
+  font-weight: 150;
   text-align: left;
+  margin-left: 1cm;
 }
 
 .Status-Updater > hr {
@@ -76,24 +74,12 @@ td {
   width: 70%;
   color: grey;
   background-color: gray;
-  margin-left: 0;
+  margin-left: 1cm;
 }
 
-.CreateButton {
-  background-color: white;
-  color: rgba(0, 45, 128, 0.603);
-}
-
-.ReadButton {
-  background-color: white;
-  color: rgba(0, 45, 128, 0.603);
-}
-
-.UpdateButton {
-  background-color: white;
-  color: rgba(0, 45, 128, 0.603);
-}
-
+.CreateButton,
+.ReadButton,
+.UpdateButton,
 .DeleteButton {
   background-color: white;
   color: rgba(0, 45, 128, 0.603);

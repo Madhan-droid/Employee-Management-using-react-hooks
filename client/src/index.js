@@ -17,6 +17,7 @@ const CREATE_DEFAULT =false;
 const READ_DEFAULT = false;
 const UPDATE_DEFAULT =false;
 const DELETE_DEFAULT = false;
+const EMPURL_DEFAULT = 'http://localhost:3000/employees';
 
 ReactDOM.render(
 
@@ -24,7 +25,7 @@ ReactDOM.render(
     <App gender={GENDER_DEFAULT}  empId={EMPID_DEFAULT}  firstName={FIRSTNAME_DEFAULT}  surName={SURNAME_DEFAULT} 
          email={EMAIL_DEFAULT} dob={DOB_DEFAULT}  hideEmpId={HIDE_EMPID_DEFAULT}  status={STATUS_DEFAULT} 
           buttonState={BUTTON_STATE_DEFAULT}  emailError={EMAIL_ERROR_DRFAULT}  create={CREATE_DEFAULT} read = {READ_DEFAULT}
-          update={UPDATE_DEFAULT} deletee={DELETE_DEFAULT}/>
+          update={UPDATE_DEFAULT} deletee={DELETE_DEFAULT} empUrl={EMPURL_DEFAULT}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

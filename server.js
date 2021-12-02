@@ -24,10 +24,10 @@ app.post('/employees', (req, res ) =>{
                  "empId":empId,
                  "info":{
                      "firstName":firstName,
-                      "surName":surName,
-                       "email": email,
-                       "dob":dob,
-                        "gender":gender
+                     "surName":surName,
+                     "email": email,
+                     "dob":dob,
+                     "gender":gender
                  }
              },
              ConditionExpression:"attribute_not_exists(empId)"
@@ -73,8 +73,6 @@ app.post('/employees', (req, res ) =>{
                 }
             }
         })
-         
-
      })
      app.put('/employees/:id' , (req,res) => {
         var empId = Number(req.params.id);

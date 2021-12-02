@@ -18,6 +18,8 @@ function App(props) {
   const [update , setUpdate] = useState(props.update);
   const [deletee , setDltee] = useState(props.deletee);
 
+  const empUrl=props.empUrl;
+
 
   const readUpdateDeleteEmp = (mode) => {
     clearFields();
@@ -62,71 +64,86 @@ const clearFields = () =>{
   setDltee(props.deletee);
 }
 
-const empUrl='http://localhost:3000/employees';
-
-const createEmp =() =>{
+const createEmp = () =>{
   if (empId === '')
     alert('Enter employee ID');
   else{
-   Axios.post(empUrl, {
-   empId : empId,
-   firstName: firstName,
-   surName:surName, 
-   email:email,
-   dob: dob,
-   gender: gender
-}).then((res)=>{
-  console.log(res);
-  alert(`Employee ${firstName+' '+surName} created successfully`);
-},(error) => {
-  alert("Employee Id exist");
-  console.log(error);
-})
+        Axios.post(empUrl, { empId : empId, firstName: firstName, surName:surName, email:email, dob: dob, gender: gender }
+        ).then((res) =>{
+        console.log(res);
+        alert(`Employee ${firstName+' '+surName} created successfully`);
+        },(error) => {
+             if (!error.response) {
+                 console.log(error);
+                 alert('Server not connected')
+           } else {
+                 alert("Employee Id exist");
+                 console.log(error);
+      }
+   })
 }};
 
-const readEmp =() =>{
+const readEmp =  () =>{
   if (empId === '')
     alert('Enter employee ID');
   else{
-    Axios.get(empUrl+'/'+empId).then((res)=>{
-  console.log(res);
-  setfirstName(res.data.firstName);
-  setsurName(res.data.surName);
-  setEmail(res.data.email);
-  setDob(res.data.dob);
-  setGender(res.data.gender);
-},(error) => {
-console.log(error);
-})
+     Axios.get(empUrl+'/'+empId).then((res)=>{
+       console.log(res);
+       setfirstName(res.data.firstName);
+       setsurName(res.data.surName);
+       setEmail(res.data.email);
+       setDob(res.data.dob);
+       setGender(res.data.gender);
+      },(error) => {
+           if (!error.response) {
+               console.log(error);
+               alert('Server not connected')
+         } else {
+               console.log(error);
+               alert("Employee ID not found");
+    }
+  })
 }}
 const updateDelEmployee = () =>{
-
   switch(buttonState){
     case 'Update' :
       if (empId === '')
-      alert('Enter employee ID');
-    else{
-      Axios.put((empUrl+'/'+empId),{
-           firstName,surName,email,dob,gender }).then((res)=>{
-             console.log(res);
-             alert('Employee updated successfully');
-             },
-            (error) => {
-            console.log(error);
-           })}
+        alert('Enter employee ID');
+      else{
+        Axios.put((empUrl+'/'+empId),{firstName,surName,email,dob,gender }
+            ).then((res)=>{
+            console.log(res);
+            alert('Employee updated successfully');
+            },(error) => {
+              if (!error.response) {
+                console.log(error);
+                alert('Server not connected')
+            } else {
+                alert("Unable to update employee details");
+                console.log(error);
+         }         
+     })
+    }
           break;
 
   case 'Delete' :
     if (empId === '')
-    alert('Enter employee ID');
+       alert('Enter employee ID');
   else{
       Axios.delete(empUrl+'/'+empId).then((res)=>{
         console.log(res);
         alert('Employee deleted successfully');
          },
          (error) => {
-             console.log(error);
-          })}
+          if (!error.response) {
+            console.log(error);
+            alert('Server not connected')
+        } else {
+         
+            alert("Unable to delete employee");
+            console.log(error);
+      }
+  })}
          break;
 
   default:
@@ -139,13 +156,12 @@ const wrapperFunction = ( ) => {
           {
              updateDelEmployee();
            } 
-        else {
+       else {
              alert("Incorrect email");
-           }}
+         }}
 else{
-  updateDelEmployee();
+    updateDelEmployee();
 }};
-
 
 const showButtonUp = hideEmpId ?{display :'none'} :{display:'block' ,float:'right'};
 const showButtonDown = buttonState==='Read' ? {display:'none' }: {display:'block' ,float:'right'};
@@ -179,16 +195,15 @@ return (
          </td>
          <td>
         <input type="text" value={empId} id='myEmpId' onChange={(event)=>{
-          setEmpId(event.target.value);
-        }}/>
+          setEmpId(event.target.value);}}   />
         </td>
       </tr>
       </tbody>
 
       <tbody>
       <tr>
-             <td></td>
-             <td style={showButtonUp}><input type='button' value='Read'  onClick={readEmp} /></td> 
+            <td></td>
+            <td style={showButtonUp}><input type='button' value='Read'  onClick={readEmp} /></td> 
            </tr>  
         </tbody>
         </table>
@@ -201,8 +216,7 @@ return (
         </td>
       <td>
         <input type="text" value={firstName} id='myFirstName' onChange={(event)=>{
-          setfirstName(event.target.value);
-        }}/>
+          setfirstName(event.target.value); }}  required/>
         </td>  
       </tr>
       </tbody>
@@ -214,8 +228,7 @@ return (
         </td>
       <td>
         <input type="text" value={surName} id='myLastName' onChange={(event)=>{
-          setsurName(event.target.value);
-        }}/>
+          setsurName(event.target.value); }} required />
         </td>
       </tr>
       </tbody>
@@ -226,8 +239,7 @@ return (
         </td>
       <td>
         <input type="email" value={email} id='myEmail' onChange={(event)=>{
-          setEmail(event.target.value);
-        }} required/>
+          setEmail(event.target.value); }} required/>
         </td>
       </tr>
       </tbody>
@@ -238,8 +250,7 @@ return (
         </td>
       <td>
         <input type="date" value={dob} id='myDob' onChange={(event)=>{
-          setDob(event.target.value);
-        }}/>
+          setDob(event.target.value); }}  required/>
         </td>
       </tr>
       </tbody>
@@ -251,12 +262,10 @@ return (
         </td>
       <td>
         <input style={{fontSize:20}} type="radio" value='Male' id='myGender' checked={gender==='Male'} onChange={(event)=>{
-          setGender(event.target.value);
-        }}/>
+          setGender(event.target.value);  }}  required/>
         <label> Male </label>
         <input type="radio" value="Female" id='myGender' checked={gender==='Female'} onChange={(event)=>{
-          setGender(event.target.value); 
-        }}/>
+          setGender(event.target.value); }}  required/>
         <label> Female</label>
         </td>
       </tr>
